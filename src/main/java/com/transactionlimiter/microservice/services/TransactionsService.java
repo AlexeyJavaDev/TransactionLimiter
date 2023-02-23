@@ -1,15 +1,18 @@
 package com.transactionlimiter.microservice.services;
 
 import com.transactionlimiter.microservice.dto.TransactionRequest;
+import com.transactionlimiter.microservice.dto.TransactionResponse;
 import com.transactionlimiter.microservice.models.Limit;
 import com.transactionlimiter.microservice.models.Transaction;
 import com.transactionlimiter.microservice.repositories.TransactionsRepository;
+import com.transactionlimiter.microservice.util.LimitNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -28,19 +31,15 @@ public class TransactionsService {
         Transaction transaction = modelMapper.map(transactionRequest, Transaction.class);
         String account = transaction.getAccountFromId();
         String category = transaction.getExpenseCategory();
-        long limitId;
 
         Limit limit = limitsService.findOne(account, category); // Ищем в БД лимит по аккаунту и категории
 
         if(limit == null)
         {
             limit = new Limit(new Date(), account, category);   // Если лимита нет, создаем новый, будет хранить баланс с начала месяца
-            limitId = limitsService.save(limit);
-            System.out.println(limitId);
-        } else {
-            limitId = limit.getId();    // Если лимит есть, присваиваем его транзакции
+            limitsService.save(limit);
         }
-        transaction.setLimitId(limitId);
+        transaction.setLimit(limit);    // Если лимит есть, присваиваем его транзакции
 
         double newLimitBalance = limit.getLimitBalance() - transaction.getTransactionSum(); // Вычисляем новый баланс лимита
 
@@ -50,6 +49,11 @@ public class TransactionsService {
 
         limit.setLimitBalance(newLimitBalance); // Присваиваем новый баланс лимита и апдейтим его
         limitsService.save(limit);
-
     }
+/*    public List<TransactionResponse> getTransactionsExceededLimit() {
+        List<TransactionResponse> resultList = transactionsRepository.getTransactionsExceededLimit();
+        if(resultList.isEmpty())
+            throw new LimitNotFoundException();
+        return transactionsRepository.getTransactionsExceededLimit();
+    }*/
 }

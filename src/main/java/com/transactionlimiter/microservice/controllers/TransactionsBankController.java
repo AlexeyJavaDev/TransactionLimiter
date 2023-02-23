@@ -9,11 +9,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/private/v1/transactions")
-public class TransactionsController {
+@RequestMapping("/api/bank/v1/transactions")
+public class TransactionsBankController {
     private final TransactionsService transactionsService;
     @Autowired
-    public TransactionsController(TransactionsService transactionsService) {
+    public TransactionsBankController(TransactionsService transactionsService) {
         this.transactionsService = transactionsService;
     }
     @PostMapping

@@ -16,11 +16,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.*;
 
 @RestController
-@RequestMapping("/api/client/v1/limits")
-public class LimitsController {
+@RequestMapping("/api/user/v1/limits")
+public class LimitsUserController {
     private final LimitsService limitsService;
     @Autowired
-    public LimitsController(LimitsService limitsService) {
+    public LimitsUserController(LimitsService limitsService) {
         this.limitsService = limitsService;
     }
     @PostMapping

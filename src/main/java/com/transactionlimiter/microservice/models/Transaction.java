@@ -28,13 +28,15 @@ public class Transaction {
     private Date date;
     @Column(name = "limit_exceeded")
     private boolean limitExceed;
-    @Column(name = "limit_id")
-    private long limitId;
+/*    @Column(name = "limit_id")
+    private long limitId;*/
+    @ManyToOne(cascade = CascadeType.ALL)
+    private Limit limit;
 
     public Transaction() {
     }
 
-    public Transaction(String accountFromId, String accountToId, String currency, double transactionSum, String expenseCategory, Date date, boolean limitExceed, long limitId) {
+    public Transaction(String accountFromId, String accountToId, String currency, double transactionSum, String expenseCategory, Date date, boolean limitExceed, Limit limit) {
         this.accountFromId = accountFromId;
         this.accountToId = accountToId;
         this.currency = currency;
@@ -42,15 +44,7 @@ public class Transaction {
         this.expenseCategory = expenseCategory;
         this.date = date;
         this.limitExceed = limitExceed;
-        this.limitId = limitId;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
+        this.limit = limit;
     }
 
     public String getAccountFromId() {
@@ -109,12 +103,12 @@ public class Transaction {
         this.limitExceed = limitExceed;
     }
 
-    public long getLimitId() {
-        return limitId;
+    public Limit getLimitId() {
+        return limit;
     }
 
-    public void setLimitId(long limitId) {
-        this.limitId = limitId;
+    public void setLimit(Limit limit) {
+        this.limit = limit;
     }
 
     @Override
@@ -128,7 +122,7 @@ public class Transaction {
                 ", expenseCategory='" + expenseCategory + '\'' +
                 ", date=" + date +
                 ", limitExceed=" + limitExceed +
-                ", limitId=" + limitId +
+                ", limit=" + limit +
                 '}';
     }
 
@@ -137,11 +131,11 @@ public class Transaction {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Transaction that = (Transaction) o;
-        return id == that.id && Double.compare(that.transactionSum, transactionSum) == 0 && limitExceed == that.limitExceed && limitId == that.limitId && accountFromId.equals(that.accountFromId) && accountToId.equals(that.accountToId) && currency.equals(that.currency) && expenseCategory.equals(that.expenseCategory) && date.equals(that.date);
+        return id == that.id && Double.compare(that.transactionSum, transactionSum) == 0 && limitExceed == that.limitExceed && limit == that.limit && accountFromId.equals(that.accountFromId) && accountToId.equals(that.accountToId) && currency.equals(that.currency) && expenseCategory.equals(that.expenseCategory) && date.equals(that.date);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, accountFromId, accountToId, currency, transactionSum, expenseCategory, date, limitExceed, limitId);
+        return Objects.hash(id, accountFromId, accountToId, currency, transactionSum, expenseCategory, date, limitExceed, limit);
     }
 }
