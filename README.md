@@ -1,5 +1,4 @@
-First working version
-Added the function of receiving, processing and saving transactions to the database, the function of setting a limit by the user and saving it in the database, the function of requesting limits by the user
+Add user transaction api
 
 CREATE TABLE limits
 (
@@ -45,21 +44,11 @@ Set limit:
 
 Get Limit:
 /api/client/v1/limits/{account}
-returl all limits;
+return all account limits;
 
 Get Limit:
 /api/client/v1/limits/{account}/actual?category=product/service/all
 return limit for some category / all categories
 
-INSERT INTO limits (setting_date, account, category, limit_sum, limit_balance)
-VALUES ('2022-01-30 00:00:00+06', '0000000001', 'product', 1000, 1000);
-INSERT INTO limits (setting_date, account, category, limit_sum, limit_balance)
-VALUES ('2022-03-25 00:12:31+06', '0000000001', 'product', 1000, 1000);
-INSERT INTO limits (setting_date, account, category, limit_sum, limit_balance)
-VALUES ('2022-03-24 15:21:14+06', '0000000001', 'product', 1000, 1000);
-INSERT INTO limits (setting_date, account, category, limit_sum, limit_balance)
-VALUES ('2022-03-24 15:21:14+06', '0000000001', 'product', 1000, 1000)
-INSERT INTO limits (setting_date, account, category, limit_sum, limit_balance)
-VALUES ('2022-03-25 00:11:31+06', '0000000001', 'product', 1000, 1000)
 
 Баланс лимитов раз в месяц должен обнуляться во всей базе(???)

@@ -63,15 +63,4 @@ public class TransactionRequest {
         this.date = date;
     }
 
-    @Override
-    public String toString() {
-        return "TransactionRequest{" +
-                "accountFromId='" + accountFromId + '\'' +
-                ", accountToId='" + accountToId + '\'' +
-                ", currency='" + currency + '\'' +
-                ", transactionSum=" + transactionSum +
-                ", expenseCategory='" + expenseCategory + '\'' +
-                ", date=" + date +
-                '}';
-    }
 }

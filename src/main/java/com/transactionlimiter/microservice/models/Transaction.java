@@ -17,7 +17,7 @@ public class Transaction {
     @Column(name = "account_to")
     private String accountToId;
     @Column(name = "currency_shortname")
-    private String currency;
+    private String transactionCurrency;
     @Column(name = "transaction_sum")
     private double transactionSum;
     @Column(name = "expense_category")
@@ -25,25 +25,23 @@ public class Transaction {
     @Column(name = "datetime")
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ssZ")
-    private Date date;
+    private Date transactionDate;
     @Column(name = "limit_exceeded")
-    private boolean limitExceed;
-/*    @Column(name = "limit_id")
-    private long limitId;*/
+    private boolean limitExceeded;
     @ManyToOne(cascade = CascadeType.ALL)
     private Limit limit;
 
     public Transaction() {
     }
 
-    public Transaction(String accountFromId, String accountToId, String currency, double transactionSum, String expenseCategory, Date date, boolean limitExceed, Limit limit) {
+    public Transaction(String accountFromId, String accountToId, String transactionCurrency, double transactionSum, String expenseCategory, Date transactionDate, boolean limitExceeded, Limit limit) {
         this.accountFromId = accountFromId;
         this.accountToId = accountToId;
-        this.currency = currency;
+        this.transactionCurrency = transactionCurrency;
         this.transactionSum = transactionSum;
         this.expenseCategory = expenseCategory;
-        this.date = date;
-        this.limitExceed = limitExceed;
+        this.transactionDate = transactionDate;
+        this.limitExceeded = limitExceeded;
         this.limit = limit;
     }
 
@@ -63,12 +61,12 @@ public class Transaction {
         this.accountToId = accountToId;
     }
 
-    public String getCurrency() {
-        return currency;
+    public String getTransactionCurrency() {
+        return transactionCurrency;
     }
 
-    public void setCurrency(String currency) {
-        this.currency = currency;
+    public void setTransactionCurrency(String currency) {
+        this.transactionCurrency = transactionCurrency;
     }
 
     public double getTransactionSum() {
@@ -87,23 +85,23 @@ public class Transaction {
         this.expenseCategory = expenseCategory;
     }
 
-    public Date getDate() {
-        return date;
+    public Date getTransactionDate() {
+        return transactionDate;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setTransactionDate(Date transactionDate) {
+        this.transactionDate = transactionDate;
     }
 
-    public boolean isLimitExceed() {
-        return limitExceed;
+    public boolean isLimitExceeded() {
+        return limitExceeded;
     }
 
-    public void setLimitExceed(boolean limitExceed) {
-        this.limitExceed = limitExceed;
+    public void setLimitExceeded(boolean limitExceeded) {
+        this.limitExceeded = limitExceeded;
     }
 
-    public Limit getLimitId() {
+    public Limit getLimit() {
         return limit;
     }
 
@@ -117,11 +115,11 @@ public class Transaction {
                 "id=" + id +
                 ", accountFromId='" + accountFromId + '\'' +
                 ", accountToId='" + accountToId + '\'' +
-                ", currency='" + currency + '\'' +
+                ", transactionCurrency='" + transactionCurrency + '\'' +
                 ", transactionSum=" + transactionSum +
                 ", expenseCategory='" + expenseCategory + '\'' +
-                ", date=" + date +
-                ", limitExceed=" + limitExceed +
+                ", transactionDate=" + transactionDate +
+                ", limitExceeded=" + limitExceeded +
                 ", limit=" + limit +
                 '}';
     }
@@ -131,11 +129,11 @@ public class Transaction {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Transaction that = (Transaction) o;
-        return id == that.id && Double.compare(that.transactionSum, transactionSum) == 0 && limitExceed == that.limitExceed && limit == that.limit && accountFromId.equals(that.accountFromId) && accountToId.equals(that.accountToId) && currency.equals(that.currency) && expenseCategory.equals(that.expenseCategory) && date.equals(that.date);
+        return id == that.id && Double.compare(that.transactionSum, transactionSum) == 0 && limitExceeded == that.limitExceeded && limit == that.limit && accountFromId.equals(that.accountFromId) && accountToId.equals(that.accountToId) && transactionCurrency.equals(that.transactionCurrency) && expenseCategory.equals(that.expenseCategory) && transactionDate.equals(that.transactionDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, accountFromId, accountToId, currency, transactionSum, expenseCategory, date, limitExceed, limit);
+        return Objects.hash(id, accountFromId, accountToId, transactionCurrency, transactionSum, expenseCategory, transactionDate, limitExceeded, limit);
     }
 }

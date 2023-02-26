@@ -5,7 +5,7 @@ import com.transactionlimiter.microservice.dto.TransactionResponse;
 import com.transactionlimiter.microservice.models.Limit;
 import com.transactionlimiter.microservice.models.Transaction;
 import com.transactionlimiter.microservice.repositories.TransactionsRepository;
-import com.transactionlimiter.microservice.util.LimitNotFoundException;
+import com.transactionlimiter.microservice.util.TransactionNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,28 +32,29 @@ public class TransactionsService {
         String account = transaction.getAccountFromId();
         String category = transaction.getExpenseCategory();
 
-        Limit limit = limitsService.findOne(account, category); // Ищем в БД лимит по аккаунту и категории
+        Limit limit = limitsService.findOne(account, category); // Find limit by account and category
 
         if(limit == null)
         {
-            limit = new Limit(new Date(), account, category);   // Если лимита нет, создаем новый, будет хранить баланс с начала месяца
-            limitsService.save(limit);
+            limit = new Limit(new Date(), account, category);   // If limit is not found - create new technical limit(with limitSum = null) to calculate limitBalance
+            limitsService.saveLimit(limit);
         }
-        transaction.setLimit(limit);    // Если лимит есть, присваиваем его транзакции
+        transaction.setLimit(limit);    // If limit is found, set it to transaction
 
-        double newLimitBalance = limit.getLimitBalance() - transaction.getTransactionSum(); // Вычисляем новый баланс лимита
+        double newLimitBalance = limit.getLimitBalance() - transaction.getTransactionSum(); // Calculate new limitBalance
 
-        if(limit.getLimitSum() !=null && newLimitBalance < 0)   // Проверяем сумму транзакции на превышение лимита и сохраняем новую транзакцию
-            transaction.setLimitExceed(true);
+        if(limit.getLimitSum() !=null && newLimitBalance < 0)   // Check limitSum for exceeding limit and save new transaction into db
+            transaction.setLimitExceeded(true);
         transactionsRepository.save(transaction);
 
-        limit.setLimitBalance(newLimitBalance); // Присваиваем новый баланс лимита и апдейтим его
-        limitsService.save(limit);
+        limit.setLimitBalance(newLimitBalance); // Set new actual limitBalance and save changes
+        limitsService.saveLimit(limit);
     }
-/*    public List<TransactionResponse> getTransactionsExceededLimit() {
-        List<TransactionResponse> resultList = transactionsRepository.getTransactionsExceededLimit();
+    public List<TransactionResponse> getTransactionsExceededLimit(String account) { // Find transactions that have exceeded the limit
+        List<TransactionResponse> resultList = transactionsRepository.joinSqlTransaction(account);
         if(resultList.isEmpty())
-            throw new LimitNotFoundException();
-        return transactionsRepository.getTransactionsExceededLimit();
-    }*/
+            throw new TransactionNotFoundException();
+        return resultList;
+    }
+
 }
