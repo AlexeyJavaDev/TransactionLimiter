@@ -17,7 +17,7 @@ public class TransactionsBankController {
         this.transactionsService = transactionsService;
     }
     @PostMapping
-    public void saveTransaction(@RequestBody TransactionRequest transactionRequest) {
+    public void saveTransaction(@RequestBody TransactionRequest transactionRequest) {   // Incoming transaction from the bank
         transactionsService.saveTransaction(transactionRequest);
     }
 

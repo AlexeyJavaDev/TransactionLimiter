@@ -24,11 +24,11 @@ public class LimitsUserController {
         this.limitsService = limitsService;
     }
     @PostMapping
-    public void setLimit(@RequestBody LimitRequest limitRequest) {    // Клиент устанавливает новый лимит
-        limitsService.set(limitRequest);
+    public void setLimit(@RequestBody LimitRequest limitRequest) {    // Setting a new limit by user
+        limitsService.setLimit(limitRequest);
     }
     @GetMapping("/{account}")
-    public List<LimitResponse> getAllLimits(@PathVariable("account") String account) {   // Запрос всех выставленных когда-то лимитов по аккаунту
+    public List<LimitResponse> getAllLimits(@PathVariable("account") String account) {   // Request for all set limits for all time
         List<Limit> resultList = limitsService.findAllByAccount(account);
         System.out.println(resultList);
         if(resultList.isEmpty())
@@ -37,7 +37,7 @@ public class LimitsUserController {
             return limitsService.toDTO(resultList);
     }
     @GetMapping("/{account}/actual")
-    public List<LimitResponse> getActualLimits(@PathVariable("account") String account,  // Запрос актуальных лимитов по категориям отдельно, либо по всем категориям
+    public List<LimitResponse> getActualLimits(@PathVariable("account") String account,  // Request for actual limits by category (service, product or all)
                                                @RequestParam(value = "category", required = false) String category) {
         if(category == null)
             throw new LimitParameterNotFoundException();

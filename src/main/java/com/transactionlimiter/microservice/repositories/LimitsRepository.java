@@ -9,6 +9,6 @@ import java.util.Optional;
 
 @Repository
 public interface LimitsRepository extends JpaRepository<Limit, Integer> {
-    Optional<Limit> findFirstByAccountAndCategoryOrderBySettingDateDesc(String account, String category);   // Находим последний актуальный
+    Optional<Limit> findFirstByAccountAndCategoryOrderBySettingLimitDateDesc(String account, String category);   // Find for actual
     List<Limit> findAllByAccount(String account);
 }

@@ -15,7 +15,7 @@ public class Limit {
     @Column(name = "setting_date")
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ssZ")
-    private Date settingDate;
+    private Date settingLimitDate;
     @Column(name = "account")
     private String account;
     @Column(name = "category")
@@ -28,16 +28,16 @@ public class Limit {
     public Limit() {
     }
 
-    public Limit(Date settingDate, String account, String category, Double limitSum, double limitBalance) {
-        this.settingDate = settingDate;
+    public Limit(Date settingLimitDate, String account, String category, Double limitSum, double limitBalance) {
+        this.settingLimitDate = settingLimitDate;
         this.account = account;
         this.category = category;
         this.limitSum = limitSum;
         this.limitBalance = limitBalance;
     }
 
-    public Limit(Date settingDate, String account, String category) {
-        this.settingDate = settingDate;
+    public Limit(Date settingLimitDate, String account, String category) {
+        this.settingLimitDate = settingLimitDate;
         this.account = account;
         this.category = category;
     }
@@ -50,12 +50,12 @@ public class Limit {
         this.id = id;
     }
 
-    public Date getSettingDate() {
-        return settingDate;
+    public Date getSettingLimitDate() {
+        return settingLimitDate;
     }
 
-    public void setSettingDate(Date settingDate) {
-        this.settingDate = settingDate;
+    public void setSettingLimitDate(Date settingLimitDate) {
+        this.settingLimitDate = settingLimitDate;
     }
 
     public String getAccount() {
@@ -94,7 +94,7 @@ public class Limit {
     public String toString() {
         return "Limit{" +
                 "id=" + id +
-                ", settingDate=" + settingDate +
+                ", settingLimitDate=" + settingLimitDate +
                 ", account='" + account + '\'' +
                 ", category='" + category + '\'' +
                 ", limitSum=" + limitSum +
@@ -107,11 +107,11 @@ public class Limit {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Limit limit = (Limit) o;
-        return id == limit.id && Double.compare(limit.limitBalance, limitBalance) == 0 && settingDate.equals(limit.settingDate) && account.equals(limit.account) && category.equals(limit.category) && Objects.equals(limitSum, limit.limitSum);
+        return id == limit.id && Double.compare(limit.limitBalance, limitBalance) == 0 && settingLimitDate.equals(limit.settingLimitDate) && account.equals(limit.account) && category.equals(limit.category) && Objects.equals(limitSum, limit.limitSum);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, settingDate, account, category, limitSum, limitBalance);
+        return Objects.hash(id, settingLimitDate, account, category, limitSum, limitBalance);
     }
 }

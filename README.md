@@ -1,5 +1,14 @@
-First working version
-Added the function of receiving, processing and saving transactions to the database, the function of setting a limit by the user and saving it in the database, the function of requesting limits by the user
+Add user transaction api
+
+The microservice accepts transactions from the bank, processes them and stores them in its database.
+It also stores spending limits set by the user.
+Transactions that exceed the limit are marked.
+The user can set a limit for two different categories (service and product), request a list of all limits with exposure dates, request current limits by category, request transactions that have exceeded the current limit.
+
+Микросервис принимает транзакции от банка, обрабатывает их и сохраняет в своей базе данных.
+Также хранит лимиты на расход средств, выставленные пользователем.
+Транзакции превысившие лимит помечаются.
+Пользователь может установить лимит по двум разным категориям (сервис и продукт), запросить список всех лимитов с датами выставления, запросить актуальные лимиты по категориям, запросить транзакции, превысившие актуальный лимит.
 
 CREATE TABLE limits
 (
@@ -45,21 +54,8 @@ Set limit:
 
 Get Limit:
 /api/client/v1/limits/{account}
-returl all limits;
+return all account limits;
 
 Get Limit:
 /api/client/v1/limits/{account}/actual?category=product/service/all
 return limit for some category / all categories
-
-INSERT INTO limits (setting_date, account, category, limit_sum, limit_balance)
-VALUES ('2022-01-30 00:00:00+06', '0000000001', 'product', 1000, 1000);
-INSERT INTO limits (setting_date, account, category, limit_sum, limit_balance)
-VALUES ('2022-03-25 00:12:31+06', '0000000001', 'product', 1000, 1000);
-INSERT INTO limits (setting_date, account, category, limit_sum, limit_balance)
-VALUES ('2022-03-24 15:21:14+06', '0000000001', 'product', 1000, 1000);
-INSERT INTO limits (setting_date, account, category, limit_sum, limit_balance)
-VALUES ('2022-03-24 15:21:14+06', '0000000001', 'product', 1000, 1000)
-INSERT INTO limits (setting_date, account, category, limit_sum, limit_balance)
-VALUES ('2022-03-25 00:11:31+06', '0000000001', 'product', 1000, 1000)
-
-Баланс лимитов раз в месяц должен обнуляться во всей базе(???)
