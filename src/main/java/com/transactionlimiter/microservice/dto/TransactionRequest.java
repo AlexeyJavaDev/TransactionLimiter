@@ -7,13 +7,13 @@ public class TransactionRequest {
 
     private String accountToId;
 
-    private String currency;
+    private String transactionCurrency;
 
     private double transactionSum;
 
     private String expenseCategory;
 
-    private Date date;
+    private Date transactionDate;
 
     public String getAccountFromId() {
         return accountFromId;
@@ -31,12 +31,12 @@ public class TransactionRequest {
         this.accountToId = accountToId;
     }
 
-    public String getCurrency() {
-        return currency;
+    public String getTransactionCurrency() {
+        return transactionCurrency;
     }
 
-    public void setCurrency(String currency) {
-        this.currency = currency;
+    public void setTransactionCurrency(String transactionCurrency) {
+        this.transactionCurrency = transactionCurrency;
     }
 
     public double getTransactionSum() {
@@ -55,12 +55,11 @@ public class TransactionRequest {
         this.expenseCategory = expenseCategory;
     }
 
-    public Date getDate() {
-        return date;
+    public Date getTransactionDate() {
+        return transactionDate;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setTransactionDate(Date transactionDate) {
+        this.transactionDate = transactionDate;
     }
-
 }

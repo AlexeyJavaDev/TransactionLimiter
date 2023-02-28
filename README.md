@@ -1,15 +1,14 @@
-Add user transaction api
+The microservice accepts transactions from the bank in rubles, processes them and saves them in its database.
+It also stores dollar spending limits set by the user.
+The microservice requests the value of the USD/RUB currency pair, stores it, and recalculates ruble transactions into dollar ones.
+Transactions that exceed the dollar limit are flagged.
+The user can set a limit for two different categories (service and product), request a list of all limits with exposure dates, request current limits by category, request transactions that have exceeded the limits.
 
-The microservice accepts transactions from the bank, processes them and stores them in its database.
-It also stores spending limits set by the user.
-Transactions that exceed the limit are marked.
-The user can set a limit for two different categories (service and product), request a list of all limits with exposure dates, request current limits by category, request transactions that have exceeded the current limit.
-
-Микросервис принимает транзакции от банка, обрабатывает их и сохраняет в своей базе данных.
-Также хранит лимиты на расход средств, выставленные пользователем.
-Транзакции превысившие лимит помечаются.
-Пользователь может установить лимит по двум разным категориям (сервис и продукт), запросить список всех лимитов с датами выставления, запросить актуальные лимиты по категориям, запросить транзакции, превысившие актуальный лимит.
-
+Микросервис принимает транзакции от банка в рублях, обрабатывает их и сохраняет в своей базе данных.
+Также хранит лимиты в долларах на расход средств, выставленные пользователем.
+Микросервис запрашивает значение стоимости валютной пары УСД/РУБ, хранит его и пересчитывыет рублевые транзакции в долларовые.
+Транзакции превысившие долларовый лимит помечаются.
+Пользователь может установить лимит по двум разным категориям (сервис и продукт), запросить список всех лимитов с датами выставления, запросить актуальные лимиты по категориям, запросить транзакции, превысившие лимиты.
 
 CREATE TABLE limits
 (
@@ -32,32 +31,42 @@ expense_category VARCHAR(10),
 datetime TIMESTAMP WITH TIME ZONE,
 limit_exceeded BOOLEAN,
 limit_id BIGINT REFERENCES limits (id)
+);
+CREATE TABLE currency_price
+(
+datetime TIMESTAMP PRIMARY KEY,
+price DOUBLE PRECISION
 )
 
-Incoming transaction:
-/api/private/v1/transactions
+Incoming transaction
+POST REQUEST:
+/api/bank/v1/transactions
 {
 "accountFromId":"0000000001",
 "accountToId": "0000000002",
-"currency": "RUB",
+"transactionCurrency": "RUB",
 "transactionSum": 502.45,
 "expenseCategory": "product",
-"date": "2023-02-21T09:48:00.860+00:00"
+"transactionDate": "2023-02-21T09:48:00.860+00:00"
 }
 
-Set limit:
-/api/client/v1/limits
+Set limit
+POST REQUEST:
+/api/user/v1/limits
 {
 "account": "0000000001",
 "category": "product",
 "limitSum": 1000.0
 }
 
-Get Limit:
-/api/client/v1/limits/{account}
-return all account limits;
+Get all limits by account
+GET REQUEST
+/api/user/v1/limits/{account}
 
-Get Limit:
-/api/client/v1/limits/{account}/actual?category=product/service/all
-return limit for some category / all categories
+Get actual limit for some category / all categories by account
+GET REQUEST:
+/api/user/v1/limits/{account}/actual?category=product/service/all
 
+Get all limit exceeded transactions by account
+GET REQUEST:
+/api/user/v1/transactions/{account}

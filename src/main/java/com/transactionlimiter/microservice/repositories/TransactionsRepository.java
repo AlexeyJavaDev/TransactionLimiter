@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface TransactionsRepository extends JpaRepository<Transaction, String> {
+public interface TransactionsRepository extends JpaRepository<Transaction, Long> {
 
     @Query("SELECT new com.transactionlimiter.microservice.dto.TransactionResponse" +
             "(t.accountToId, t.transactionCurrency, t.transactionSum, t.expenseCategory, t.transactionDate, l.settingLimitDate, l.limitSum) " +

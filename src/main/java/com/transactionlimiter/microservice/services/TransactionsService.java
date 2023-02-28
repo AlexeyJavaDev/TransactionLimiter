@@ -20,11 +20,13 @@ public class TransactionsService {
     private final TransactionsRepository transactionsRepository;
     private final LimitsService limitsService;
     private final ModelMapper modelMapper;
+    private final CurrencyPricesService currencyPricesService;
     @Autowired
-    public TransactionsService(TransactionsRepository transactionsRepository, LimitsService limitsService, ModelMapper modelMapper) {
+    public TransactionsService(TransactionsRepository transactionsRepository, LimitsService limitsService, ModelMapper modelMapper, CurrencyPricesService currencyPricesService) {
         this.transactionsRepository = transactionsRepository;
         this.limitsService = limitsService;
         this.modelMapper = modelMapper;
+        this.currencyPricesService = currencyPricesService;
     }
     @Transactional
     public void saveTransaction(TransactionRequest transactionRequest) {
@@ -41,7 +43,7 @@ public class TransactionsService {
         }
         transaction.setLimit(limit);    // If limit is found, set it to transaction
 
-        double newLimitBalance = limit.getLimitBalance() - transaction.getTransactionSum(); // Calculate new limitBalance
+        double newLimitBalance = limit.getLimitBalance() - currencyPricesService.convertToUSD(transaction.getTransactionSum()); // Calculate new limitBalance
 
         if(limit.getLimitSum() !=null && newLimitBalance < 0)   // Check limitSum for exceeding limit and save new transaction into db
             transaction.setLimitExceeded(true);

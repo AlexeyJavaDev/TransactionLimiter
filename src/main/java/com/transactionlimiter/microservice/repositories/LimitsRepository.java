@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface LimitsRepository extends JpaRepository<Limit, Integer> {
-    Optional<Limit> findFirstByAccountAndCategoryOrderBySettingLimitDateDesc(String account, String category);   // Find for actual
+public interface LimitsRepository extends JpaRepository<Limit, Long> {
+    Optional<Limit> findFirstByAccountAndCategoryOrderBySettingLimitDateDesc(String account, String category);   // Find actual limit
     List<Limit> findAllByAccount(String account);
 }

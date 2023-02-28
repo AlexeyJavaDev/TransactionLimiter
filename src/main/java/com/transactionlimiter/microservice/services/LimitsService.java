@@ -30,7 +30,7 @@ public class LimitsService {
         return limitsRepository.findFirstByAccountAndCategoryOrderBySettingLimitDateDesc(account, category).orElse(null);
     }
     @Transactional
-    public long saveLimit(Limit limit) { // Сохраняем лимит в базу, метод для TransactionsService
+    public long saveLimit(Limit limit) { // Save limit into DB< method for TransactionsService
         limitsRepository.save(limit);
         return limit.getId();
     }

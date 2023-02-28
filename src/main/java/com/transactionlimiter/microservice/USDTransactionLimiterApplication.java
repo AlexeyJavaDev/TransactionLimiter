@@ -6,10 +6,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
-public class TransactionLimiterApplication {
+public class USDTransactionLimiterApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(TransactionLimiterApplication.class, args);
+		SpringApplication.run(USDTransactionLimiterApplication.class, args);
 	}
 	@Bean
 	public ModelMapper modelMapper() {

@@ -6,17 +6,22 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>3.0.2</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<relativePath/>
 	</parent>
 	<groupId>com.transactionlimiter</groupId>
-	<artifactId>transaction-limiter</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>TransactionLimiter</name>
+	<artifactId>usd-transaction-limiter</artifactId>
+	<version>1.0</version>
+	<name>UsdTransactionLimiter</name>
 	<description>REST API</description>
 	<properties>
 		<java.version>19</java.version>
 	</properties>
 	<dependencies>
+		<dependency>
+			<groupId>com.googlecode.json-simple</groupId>
+			<artifactId>json-simple</artifactId>
+			<version>1.1.1</version>
+		</dependency>
 		<dependency>
 			<groupId>org.modelmapper</groupId>
 			<artifactId>modelmapper</artifactId>

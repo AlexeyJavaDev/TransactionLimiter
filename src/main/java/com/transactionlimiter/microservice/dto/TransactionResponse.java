@@ -1,5 +1,7 @@
 package com.transactionlimiter.microservice.dto;
 
+import com.transactionlimiter.microservice.services.CurrencyPricesService;
+
 import java.util.Date;
 
 public class TransactionResponse {
@@ -17,6 +19,26 @@ public class TransactionResponse {
     private Date settingLimitDate;
 
     private Double limitSum;
+    private String limitCurrency;
+
+    public TransactionResponse(String accountToId, String transactionCurrency, double transactionSum, String expenseCategory, Date transactionDate, Date settingLimitDate, Double limitSum) {
+        this.accountToId = accountToId;
+        this.transactionCurrency = transactionCurrency;
+        this.transactionSum = transactionSum;
+        this.expenseCategory = expenseCategory;
+        this.transactionDate = transactionDate;
+        this.settingLimitDate = settingLimitDate;
+        this.limitSum = limitSum;
+        this.limitCurrency = CurrencyPricesService.getLimitCurrency();
+    }
+
+    public String getLimitCurrency() {
+        return limitCurrency;
+    }
+
+    public void setLimitCurrency(String limitCurrency) {
+        this.limitCurrency = limitCurrency;
+    }
 
     public String getAccountToId() {
         return accountToId;
@@ -30,7 +52,7 @@ public class TransactionResponse {
         return transactionCurrency;
     }
 
-    public void setTransactionCurrency(String currency) {
+    public void setTransactionCurrency(String transactionCurrency) {
         this.transactionCurrency = transactionCurrency;
     }
 

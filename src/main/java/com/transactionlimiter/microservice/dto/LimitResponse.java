@@ -3,16 +3,16 @@ package com.transactionlimiter.microservice.dto;
 import java.util.Date;
 
 public class LimitResponse {
-    private Date settingDate;
+    private Date settingLimitDate;
     private String category;
     private double limitSum;
 
-    public Date getSettingDate() {
-        return settingDate;
+    public Date getSettingLimitDate() {
+        return settingLimitDate;
     }
 
-    public void setSettingDate(Date settingDate) {
-        this.settingDate = settingDate;
+    public void setSettingLimitDate(Date settingLimitDate) {
+        this.settingLimitDate = settingLimitDate;
     }
 
     public String getCategory() {
