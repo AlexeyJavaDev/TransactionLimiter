@@ -2,7 +2,9 @@ package com.transactionlimiter.microservice.controllers;
 
 import com.transactionlimiter.microservice.dto.TransactionRequest;
 import com.transactionlimiter.microservice.services.TransactionsService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,7 +19,7 @@ public class TransactionsBankController {
         this.transactionsService = transactionsService;
     }
     @PostMapping
-    public void saveTransaction(@RequestBody TransactionRequest transactionRequest) {   // Incoming transaction from the bank
+    public void saveTransaction(@RequestBody TransactionRequest transactionRequest, BindingResult bindingResult) {   // Incoming transaction from the bank
         transactionsService.saveTransaction(transactionRequest);
     }
 

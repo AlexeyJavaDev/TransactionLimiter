@@ -1,14 +1,16 @@
 The microservice accepts transactions from the bank in rubles, processes them and saves them in its database.
-It also stores dollar spending limits set by the user.
-The microservice requests the value of the USD/RUB currency pair, stores it, and recalculates ruble transactions into dollar ones.
-Transactions that exceed the dollar limit are flagged.
-The user can set a limit for two different categories (service and product), request a list of all limits with exposure dates, request current limits by category, request transactions that have exceeded the limits.
+The user can set a spending limit in dollars for two categories (service or product).
+The microservice recalculates the transaction amount at the current rate and flags the transaction if it exceeds the limit.
+Exchange rates are stored in the database, because requests to the resource are paid, the rate is updated according to the New York opening and closing times of trading, twice a day.
+The database stores all the set limits, the user can request a list of limits with the dates of exposure or current limits by category.
+The user can request a list of transactions that have exceeded the limit, indicating the limits and dates of issue.
 
 Микросервис принимает транзакции от банка в рублях, обрабатывает их и сохраняет в своей базе данных.
-Также хранит лимиты в долларах на расход средств, выставленные пользователем.
-Микросервис запрашивает значение стоимости валютной пары УСД/РУБ, хранит его и пересчитывыет рублевые транзакции в долларовые.
-Транзакции превысившие долларовый лимит помечаются.
-Пользователь может установить лимит по двум разным категориям (сервис и продукт), запросить список всех лимитов с датами выставления, запросить актуальные лимиты по категориям, запросить транзакции, превысившие лимиты.
+Пользователь может установить лимит расхода средств в долларах по двум категориям(сервис или продукт).
+Микросервис пересчитывает сумму транзакции по текущему курсу и помечает транзакцию, если она превышает лимит.
+Курсы валют хранятся в базе, т.к. запросы к ресурсу платные, курс обновляется по Нью-Йорксому времени открытия и закрытия торгов, дважды в сутки.
+В базе данных хранятся все установленные лимиты, пользователь может запросить список лимитов с датами выставления или актуальные лимиты по категориям.
+Пользователь может запросить список превысивших лимит транзакций с указаниями лимитов и дат выставления.
 
 CREATE TABLE limits
 (
@@ -17,7 +19,8 @@ setting_date TIMESTAMP WITH TIME ZONE,
 account VARCHAR(10),
 category VARCHAR(10),
 limit_sum DOUBLE PRECISION,
-limit_balance DOUBLE PRECISION
+limit_balance DOUBLE PRECISION,
+balance_month integer
 );
 
 CREATE TABLE transactions

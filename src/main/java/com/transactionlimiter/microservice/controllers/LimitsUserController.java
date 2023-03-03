@@ -8,9 +8,11 @@ import com.transactionlimiter.microservice.util.ErrorResponse;
 import com.transactionlimiter.microservice.util.LimitAlreadyExistsException;
 import com.transactionlimiter.microservice.util.LimitNotFoundException;
 import com.transactionlimiter.microservice.util.LimitParameterNotFoundException;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -24,7 +26,7 @@ public class LimitsUserController {
         this.limitsService = limitsService;
     }
     @PostMapping
-    public void setLimit(@RequestBody LimitRequest limitRequest) {    // Setting a new limit by user
+    public void setLimit(@RequestBody LimitRequest limitRequest, BindingResult bindingResult) {    // Setting a new limit by user
         limitsService.setLimit(limitRequest);
     }
     @GetMapping("/{account}")

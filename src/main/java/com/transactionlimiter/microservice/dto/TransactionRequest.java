@@ -1,8 +1,13 @@
 package com.transactionlimiter.microservice.dto;
 
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
+
 import java.util.Date;
 
 public class TransactionRequest {
+
     private String accountFromId;
 
     private String accountToId;

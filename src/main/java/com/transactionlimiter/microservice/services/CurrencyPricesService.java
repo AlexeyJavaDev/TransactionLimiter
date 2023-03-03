@@ -25,6 +25,7 @@ public class CurrencyPricesService {
     private static final String limitCurrency = "USD";
     private CurrencyPrice currencyPrice;
     private final ZonedDateTimeCreator zonedDateTimeCreator;
+
     @Autowired
     public CurrencyPricesService(CurrencyPrice currencyPrice, CurrencyPricesRepository currencyPricesRepository, ZonedDateTimeCreator zonedDateTimeCreator) {
         this.currencyPrice = currencyPrice;
@@ -41,7 +42,7 @@ public class CurrencyPricesService {
         Date openTime = zonedDateTimeCreator.createOpeningTime();
         Date closeTime = zonedDateTimeCreator.createClosingTime();
 
-        currencyPrice = getActualCurrencyPrice();   // Set actual price
+        currencyPrice = getActualCurrencyPrice();   // Get actual price from DB
         if(currencyPrice == null)
             currencyPrice = createNewPriceAndAddIntoDB();
 
@@ -49,7 +50,7 @@ public class CurrencyPricesService {
         Date currentDate = new Date();
 
         if(!dateFormat.format(priceDate).equals(dateFormat.format(currentDate)) ||  // Check price by date
-                (dateFormat.format(priceDate).equals(dateFormat.format(currentDate)) && currentDate.after(closeTime))) {
+                (dateFormat.format(priceDate).equals(dateFormat.format(currentDate)) && currentDate.after(closeTime) && priceDate.before(closeTime))) {
             currencyPrice = createNewPriceAndAddIntoDB();
         }
 

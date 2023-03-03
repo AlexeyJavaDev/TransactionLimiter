@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
-import java.util.Objects;
 
 @Entity
 @Table(name = "limits")
@@ -24,22 +23,17 @@ public class Limit {
     private Double limitSum;
     @Column(name = "limit_balance")
     private double limitBalance;
+    @Column(name = "balance_month")
+    private int balanceMonth;
 
     public Limit() {
     }
 
-    public Limit(Date settingLimitDate, String account, String category, Double limitSum, double limitBalance) {
+    public Limit(Date settingLimitDate, String account, String category, int balanceMonth) {
         this.settingLimitDate = settingLimitDate;
         this.account = account;
         this.category = category;
-        this.limitSum = limitSum;
-        this.limitBalance = limitBalance;
-    }
-
-    public Limit(Date settingLimitDate, String account, String category) {
-        this.settingLimitDate = settingLimitDate;
-        this.account = account;
-        this.category = category;
+        this.balanceMonth = balanceMonth;
     }
 
     public long getId() {
@@ -90,28 +84,11 @@ public class Limit {
         this.limitBalance = limitBalance;
     }
 
-    @Override
-    public String toString() {
-        return "Limit{" +
-                "id=" + id +
-                ", settingLimitDate=" + settingLimitDate +
-                ", account='" + account + '\'' +
-                ", category='" + category + '\'' +
-                ", limitSum=" + limitSum +
-                ", limitBalance=" + limitBalance +
-                '}';
+    public int getBalanceMonth() {
+        return balanceMonth;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Limit limit = (Limit) o;
-        return id == limit.id && Double.compare(limit.limitBalance, limitBalance) == 0 && settingLimitDate.equals(limit.settingLimitDate) && account.equals(limit.account) && category.equals(limit.category) && Objects.equals(limitSum, limit.limitSum);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, settingLimitDate, account, category, limitSum, limitBalance);
+    public void setBalanceMonth(int balanceMonth) {
+        this.balanceMonth = balanceMonth;
     }
 }

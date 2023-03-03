@@ -1,8 +1,15 @@
 package com.transactionlimiter.microservice.dto;
 
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.Size;
+
 public class LimitRequest {
+
     private String account;
+
     private String category;
+
     private double limitSum;
 
     public String getAccount() {
