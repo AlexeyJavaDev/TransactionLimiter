@@ -6,6 +6,7 @@ import com.transactionlimiter.microservice.dto.LimitResponse;
 import com.transactionlimiter.microservice.repositories.LimitsRepository;
 import com.transactionlimiter.microservice.util.LimitAlreadyExistsException;
 import com.transactionlimiter.microservice.util.LimitNotFoundException;
+import com.transactionlimiter.microservice.util.LimitParameterNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -57,19 +58,53 @@ public class LimitsService {
         }
     }
     public List<Limit> findAllByAccount(String account) {
-        return limitsRepository.findAllByAccount(account);
+        List<Limit> resultList = limitsRepository.findAllByAccount(account);
+        if(resultList.isEmpty())
+            throw new LimitNotFoundException();
+        else
+            return resultList;
     }
-    public Optional<Limit> findOneActualByAccountAndCategory(String account, String category) {
+    public List<Limit> findActualLimits(String account, String category) {
+        if(!category.equals("product") && !category.equals("service") && !category.equals("all"))
+            throw new LimitParameterNotFoundException();
+        List<Limit> resultList = new ArrayList<>();
+        switch (category) {
+            case ("service"), ("product") -> {
+                limitsRepository.findFirstByAccountAndCategoryOrderBySettingLimitDateDesc(account, category).ifPresent(resultList::add);
+            }
+            case ("all") -> {
+               resultList = findAllActualByAccount(account);
+            }
+        }
+        if(resultList.isEmpty())
+            throw new LimitNotFoundException();
+        else
+            return resultList;
+    }
+/*    public Optional<Limit> findOneActualByAccountAndCategory(String account, String category) {
+        if(category == null || !category.equals("product") || !category.equals("service"))
+            throw new LimitParameterNotFoundException();
+        List<Limit> resultList = new ArrayList<>();
+        switch (category) {
+            case ("service"), ("product") -> {
+                limitsService.findOneActualByAccountAndCategory(account, category).ifPresent(resultList::add);
+            }
+            case ("all") -> {
+                resultList.addAll(limitsService.findAllActualByAccountAndCategory(account));
+            }
+        }
+        if(resultList.isEmpty())
+            throw new LimitNotFoundException();
         return limitsRepository.findFirstByAccountAndCategoryOrderBySettingLimitDateDesc(account, category);
-    }
+    }*/
 
-    public List<Limit> findAllActualByAccountAndCategory(String account) {
+    private List<Limit> findAllActualByAccount(String account) {
         List<Limit> resultList = new ArrayList<>();
         limitsRepository.findFirstByAccountAndCategoryOrderBySettingLimitDateDesc(account, "product").ifPresent(resultList::add);
         limitsRepository.findFirstByAccountAndCategoryOrderBySettingLimitDateDesc(account, "service").ifPresent(resultList::add);
         return resultList;
     }
-    public List<LimitResponse> toDTO(List<Limit> limits) {
+    public List<LimitResponse> toDTO(List<Limit> limits) {  // Convert Limit to LimitResponse
         List<LimitResponse> resultList = limits.stream().filter(limit -> limit.getLimitSum() != null).map(limit -> modelMapper.map(limit, LimitResponse.class)).toList();
         if(resultList.isEmpty())
             throw new LimitNotFoundException();

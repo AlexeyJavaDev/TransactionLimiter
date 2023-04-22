@@ -1,15 +1,17 @@
 package com.transactionlimiter.microservice.dto;
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 
 public class LimitRequest {
-
+    @NotEmpty(message = "Account should not be empty")
+    @Size(min = 10, max = 10, message = "Account should be 10 characters")
     private String account;
-
+    @NotEmpty(message = "Category should not be empty")
     private String category;
 
+    @Min(value = 0, message = "Limit should be positive or 0")
     private double limitSum;
 
     public String getAccount() {

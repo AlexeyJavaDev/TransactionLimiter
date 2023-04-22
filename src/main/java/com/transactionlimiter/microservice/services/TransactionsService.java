@@ -42,7 +42,6 @@ public class TransactionsService {
         if(limit == null)
         {
             limit = new Limit(new Date(), account, category, limitBalanceMonth);   // If limit is not found - create new technical limit(with limitSum = null) to calculate limitBalance
-            System.out.println(limitBalanceMonth + "     " + limit.getBalanceMonth());
             limitsService.saveLimit(limit);
         }
         transaction.setLimit(limit);    // If limit is found, set it to transaction

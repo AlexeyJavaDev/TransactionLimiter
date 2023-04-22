@@ -2,6 +2,7 @@ package com.transactionlimiter.microservice.controllers;
 
 import com.transactionlimiter.microservice.dto.TransactionRequest;
 import com.transactionlimiter.microservice.services.TransactionsService;
+import com.transactionlimiter.microservice.util.ArgumentNotValidException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
@@ -19,7 +20,9 @@ public class TransactionsBankController {
         this.transactionsService = transactionsService;
     }
     @PostMapping
-    public void saveTransaction(@RequestBody TransactionRequest transactionRequest, BindingResult bindingResult) {   // Incoming transaction from the bank
+    public void saveTransaction(@RequestBody @Valid TransactionRequest transactionRequest, BindingResult bindingResult) {   // Incoming transaction from the bank
+        if(bindingResult.hasErrors())
+            throw new ArgumentNotValidException(bindingResult);
         transactionsService.saveTransaction(transactionRequest);
     }
 

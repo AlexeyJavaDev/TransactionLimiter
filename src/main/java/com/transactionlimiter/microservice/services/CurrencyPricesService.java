@@ -43,16 +43,6 @@ public class CurrencyPricesService {
         Date closeTime = zonedDateTimeCreator.createClosingTime();
 
         currencyPrice = getActualCurrencyPrice();   // Get actual price from DB
-        if(currencyPrice == null)
-            currencyPrice = createNewPriceAndAddIntoDB();
-
-        Date priceDate = currencyPrice.getDatetime();
-        Date currentDate = new Date();
-
-        if(!dateFormat.format(priceDate).equals(dateFormat.format(currentDate)) ||  // Check price by date
-                (dateFormat.format(priceDate).equals(dateFormat.format(currentDate)) && currentDate.after(closeTime) && priceDate.before(closeTime))) {
-            currencyPrice = createNewPriceAndAddIntoDB();
-        }
 
         Timer timer = new Timer();
         TimerTask taskOpen = new TimerTask() {
@@ -67,8 +57,18 @@ public class CurrencyPricesService {
                 currencyPrice = createNewPriceAndAddIntoDB();
             }
         };
-        timer.schedule(taskOpen, openTime, 86400000);
-        timer.schedule(taskClose, closeTime, 86400000);
+
+        Date priceDate = currencyPrice.getDatetime();
+        Date currentDate = new Date();
+
+        if (currencyPrice == null || !dateFormat.format(priceDate).equals(dateFormat.format(currentDate)) ||
+                dateFormat.format(priceDate).equals(dateFormat.format(currentDate)) && currentDate.after(closeTime) && priceDate.before(closeTime)) {
+            timer.schedule(taskOpen, openTime, 86400000);
+            timer.schedule(taskClose, closeTime, 86400000);
+        } else if (currentDate.after(openTime) && currentDate.before(closeTime)) {
+            timer.schedule(taskOpen, openTime.getTime() + 86400000 - currentDate.getTime(), 86400000);
+            timer.schedule(taskClose, closeTime, 86400000);
+        }
     }
     @Transactional
     private CurrencyPrice createNewPriceAndAddIntoDB() {
